@@ -6,6 +6,7 @@
 package space.kscience.kmath.stat
 
 import space.kscience.kmath.UnstableKMathAPI
+import space.kscience.kmath.misc.sorted
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.structures.slice
@@ -37,5 +38,15 @@ class TestBasicStatistics {
     @Test
     fun varianceFloat64() {
         assertEquals(0.083, Float64Field.variance(float64Sample), 0.0002)
+    }
+
+    @Test
+    fun standardDeviationFloat64() {
+        assertEquals(0.288, Float64Field.standardDeviation(float64Sample), 0.0002)
+    }
+
+    @Test
+    fun trimmedMeanFloat64() {
+        assertEquals(0.4917, Float64Field.trimmedMean(0.1)(float64Sample), 0.0002)
     }
 }
