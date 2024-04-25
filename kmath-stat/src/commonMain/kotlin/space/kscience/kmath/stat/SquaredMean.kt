@@ -1,0 +1,57 @@
+/*
+ * Copyright 2018-2024 KMath contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
+package space.kscience.kmath.stat
+
+import space.kscience.kmath.operations.*
+import space.kscience.kmath.structures.Buffer
+import space.kscience.kmath.structures.indices
+
+/**
+ * Squared mean
+ */
+public class SquaredMean<T>(
+    private val field: Field<T>,
+) : ComposableStatistic<T, Pair<T, Int>, T>, BlockingStatistic<T, T> {
+
+    override fun evaluateBlocking(data: Buffer<T>): T = with(field) {
+        var res = zero
+        for (i in data.indices) {
+            res += data[i] * data[i]
+        }
+        res / data.size
+    }
+
+    override suspend fun evaluate(data: Buffer<T>): T = super<ComposableStatistic>.evaluate(data)
+
+    override suspend fun computeIntermediate(data: Buffer<T>): Pair<T, Int> = with(field) {
+        var res = zero
+        for (i in data.indices) {
+            res += data[i] * data[i]
+        }
+        res to data.size
+    }
+
+    override suspend fun composeIntermediate(first: Pair<T, Int>, second: Pair<T, Int>): Pair<T, Int> =
+        with(field) { first.first + second.first } to (first.second + second.second)
+
+    override suspend fun toResult(intermediate: Pair<T, Int>): T = with(field) {
+        intermediate.first / intermediate.second
+    }
+
+    public companion object {
+        public fun evaluate(buffer: Buffer<Double>): Double = Float64Field.squaredMean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Int>): Int = Int32Ring.squaredMean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Long>): Long = Int64Ring.squaredMean.evaluateBlocking(buffer)
+    }
+}
+
+
+//TODO replace with optimized version which respects overflow
+public val Float64Field.squaredMean: SquaredMean<Double> get() = SquaredMean(Float64Field)
+public val Int32Ring.squaredMean: SquaredMean<Int> get() = SquaredMean(Int32Field)
+public val Int64Ring.squaredMean: SquaredMean<Long> get() = SquaredMean(Int64Field)
+
+
