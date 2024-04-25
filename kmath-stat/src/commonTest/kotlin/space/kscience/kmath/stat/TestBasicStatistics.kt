@@ -28,4 +28,14 @@ class TestBasicStatistics {
     fun meanFloat64() {
         assertEquals(0.488, Float64Field.mean(float64Sample), 0.0002)
     }
+
+    @Test
+    fun squaredMeanFloat64() {
+        assertEquals(0.321, Float64Field.squaredMean(float64Sample), 0.0002)
+    }
+
+    @Test
+    fun varianceFloat64() {
+        assertEquals(0.083, Float64Field.variance(float64Sample), 0.0002)
+    }
 }
