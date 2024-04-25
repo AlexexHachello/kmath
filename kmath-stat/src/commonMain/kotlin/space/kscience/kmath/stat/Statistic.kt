@@ -34,6 +34,17 @@ public fun interface BlockingStatistic<in T, out R> : Statistic<T, R> {
 
 public operator fun <T, R> BlockingStatistic<T, R>.invoke(data: Buffer<T>): R = evaluateBlocking(data)
 
+
+/**
+ * A function that transforms a buffer of random quantities with weights to some resulting value
+ */
+public fun interface WeightedStatistic<in T, out R>  {
+    public fun evaluate(data: Buffer<T>, weights: Buffer<T>): R
+}
+
+public operator fun <T, R> WeightedStatistic<T, R>.invoke(data: Buffer<T>, weights: Buffer<T>): R = evaluate(data, weights)
+
+
 /**
  * A statistic tha could be computed separately on different blocks of data and then composed
  *
