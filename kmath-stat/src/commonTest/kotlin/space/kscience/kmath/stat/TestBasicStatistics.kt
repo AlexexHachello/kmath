@@ -59,4 +59,10 @@ class TestBasicStatistics {
         assertEquals(0.6580, Float64Field.weightedMean(float64Sample, float64Weights), 0.0005)
         assertEquals(Float64Field.mean(float64Sample), Float64Field.weightedMean(float64Sample, onesWeights), 0.0005)
     }
+
+    @Test
+    fun zScoreFloat64() {
+        /* TODO: Here test for z-score should be, but the Standard deviation has NOT corrected implementation. So waiting for
+        * TODO: (continue) this issue will be fixed. */
+    }
 }

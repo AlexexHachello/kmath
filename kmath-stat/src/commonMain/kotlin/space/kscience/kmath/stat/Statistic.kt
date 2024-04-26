@@ -46,6 +46,16 @@ public operator fun <T, R> WeightedStatistic<T, R>.invoke(data: Buffer<T>, weigh
 
 
 /**
+ * A function that transforms a buffer of random quantities to some resulting value for concrete point
+ */
+public fun interface DottyStatistic<in T, out R>  {
+    public fun evaluate(data: Buffer<T>, index: Int): R
+}
+
+public operator fun <T, R> DottyStatistic<T, R>.invoke(data: Buffer<T>, index: Int): R = evaluate(data, index)
+
+
+/**
  * A statistic tha could be computed separately on different blocks of data and then composed
  *
  * @param T the source type.
