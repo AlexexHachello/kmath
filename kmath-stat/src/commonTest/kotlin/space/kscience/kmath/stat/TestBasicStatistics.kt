@@ -62,7 +62,6 @@ class TestBasicStatistics {
 
     @Test
     fun zScoreFloat64() {
-        /* TODO: Here test for z-score should be, but the Standard deviation has NOT corrected implementation. So waiting for
-        * TODO: (continue) this issue will be fixed. */
+        assertEquals(0.2378, Float64Field.zScore(4)(float64Sample), 0.0005)
     }
 }
