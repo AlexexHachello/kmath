@@ -6,6 +6,8 @@
 package space.kscience.kmath.random
 
 import space.kscience.kmath.structures.Float64Buffer
+import space.kscience.kmath.structures.Int32Buffer
+import space.kscience.kmath.structures.Int64Buffer
 import kotlin.random.Random
 
 /**
@@ -35,6 +37,11 @@ public interface RandomGenerator {
     public fun nextInt(): Int
 
     /**
+     * A chunk of doubles of given [size].
+     */
+    public fun nextIntBuffer(size: Int): Int32Buffer= Int32Buffer(size) { nextInt() }
+
+    /**
      * Gets the next random non-negative `Int` from the random number generator less than the specified [until] bound.
      *
      * Generates an `Int` random value uniformly distributed between `0` (inclusive) and the specified [until] bound
@@ -55,6 +62,11 @@ public interface RandomGenerator {
      * Generates a `Long` random value uniformly distributed between `0` (inclusive) and the specified [until] bound (exclusive).
      */
     public fun nextLong(until: Long): Long
+
+    /**
+     * A chunk of doubles of given [size].
+     */
+    public fun nextLongBuffer(size: Int): Int64Buffer= Int64Buffer(size) { nextLong() }
 
     /**
      * Fills a subrange with the specified byte [array] starting from [fromIndex] inclusive and ending [toIndex] exclusive
