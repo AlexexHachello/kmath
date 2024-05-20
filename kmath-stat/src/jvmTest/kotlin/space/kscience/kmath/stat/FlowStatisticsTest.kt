@@ -4,13 +4,9 @@ package space.kscience.kmath.stat
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.junit.jupiter.api.Timeout
-import space.kscience.kmath.chains.cumulativeSum
-import space.kscience.kmath.coroutines.async
-import space.kscience.kmath.coroutines.mapParallel
 import space.kscience.kmath.operations.Float64Field
 import space.kscience.kmath.random.RandomGenerator
 import space.kscience.kmath.stat.TestBasicStatistics.Companion.size
-import space.kscience.kmath.structures.Float64Buffer
 import java.util.concurrent.Executors
 import kotlin.test.Test
 import kotlin.test.assertEquals
