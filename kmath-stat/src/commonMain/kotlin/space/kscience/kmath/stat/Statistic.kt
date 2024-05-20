@@ -34,6 +34,28 @@ public fun interface BlockingStatistic<in T, out R> : Statistic<T, R> {
 
 public operator fun <T, R> BlockingStatistic<T, R>.invoke(data: Buffer<T>): R = evaluateBlocking(data)
 
+
+/**
+ * A function that transforms a buffer of random quantities with weights to some resulting value
+ */
+public fun interface WeightedStatistic<in T, out R>  {
+    public suspend fun evaluate(data: Buffer<T>, weights: Buffer<T>): R
+}
+
+public suspend operator fun <T, R> WeightedStatistic<T, R>.invoke(data: Buffer<T>, weights: Buffer<T>): R = evaluate(data, weights)
+
+/**
+ * A statistic that is computed in a synchronous blocking mode with weights
+ */
+public fun interface BlockingWeightedStatistic<in T, out R> : WeightedStatistic<T, R> {
+    public fun evaluateBlocking(data: Buffer<T>, weights: Buffer<T>): R
+
+    override suspend fun evaluate(data: Buffer<T>, weights: Buffer<T>): R = evaluateBlocking(data, weights)
+}
+
+public operator fun <T, R> BlockingWeightedStatistic<T, R>.invoke(data: Buffer<T>, weights: Buffer<T>): R = evaluateBlocking(data, weights)
+
+
 /**
  * A statistic tha could be computed separately on different blocks of data and then composed
  *
@@ -52,6 +74,26 @@ public interface ComposableStatistic<in T, I, out R> : Statistic<T, R> {
     public suspend fun toResult(intermediate: I): R
 
     override suspend fun evaluate(data: Buffer<T>): R = toResult(computeIntermediate(data))
+}
+
+/**
+ * A statistic tha could be computed separately on different blocks of data and then composed
+ *
+ * @param T the source type.
+ * @param I the intermediate block type.
+ * @param R the result type.
+ */
+public interface ComposableWeightedStatistic<in T, I, out R> : WeightedStatistic<T, R> {
+    //compute statistic on a single block
+    public suspend fun computeIntermediate(data: Buffer<T>, weights: Buffer<T>): I
+
+    //Compose two blocks
+    public suspend fun composeIntermediate(first: I, second: I): I
+
+    //Transform block to result
+    public suspend fun toResult(intermediate: I): R
+
+    override suspend fun evaluate(data: Buffer<T>, weights: Buffer<T>): R = toResult(computeIntermediate(data, weights))
 }
 
 /**

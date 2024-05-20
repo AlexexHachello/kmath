@@ -17,7 +17,9 @@ public class Variance<T>(
 
     override fun evaluateBlocking(data: Buffer<T>): T = with(field) {
         val mean = Mean(field).evaluateBlocking(data)
-        SquaredMean(field).evaluateBlocking(data) - mean * mean
+        val squaredMean = SquaredMean(field).evaluateBlocking(data)
+
+        squaredMean - field.power(mean, 2)
     }
 
     public companion object {

@@ -48,7 +48,6 @@ public class SquaredMean<T>(
     }
 }
 
-
 //TODO replace with optimized version which respects overflow
 public val Float64Field.squaredMean: SquaredMean<Double> get() = SquaredMean(Float64Field)
 public val Int32Ring.squaredMean: SquaredMean<Int> get() = SquaredMean(Int32Field)

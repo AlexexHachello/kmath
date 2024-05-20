@@ -12,7 +12,9 @@ import space.kscience.kmath.structures.Buffer
 /**
  * Non-composable median
  */
-public class Median<T>(private val field: Field<T>, private val comparator: Comparator<T>) : BlockingStatistic<T, T> {
+public class Median<T>(private val field: Field<T>,
+                       private val comparator: Comparator<T>)
+    : BlockingStatistic<T, T> {
 
     override fun evaluateBlocking(data: Buffer<T>): T = when {
         data.size == 0 -> error("Can't compute median of an empty buffer")
@@ -27,9 +29,9 @@ public class Median<T>(private val field: Field<T>, private val comparator: Comp
 
     public companion object {
 
-        public fun evaluate(buffer: Buffer<Double>): Double = Float64Field.mean.evaluateBlocking(buffer)
-        public fun evaluate(buffer: Buffer<Int>): Int = Int32Ring.mean.evaluateBlocking(buffer)
-        public fun evaluate(buffer: Buffer<Long>): Long = Int64Ring.mean.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Double>): Double = Float64Field.median.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Int>): Int = Int32Ring.median.evaluateBlocking(buffer)
+        public fun evaluate(buffer: Buffer<Long>): Long = Int64Ring.median.evaluateBlocking(buffer)
     }
 }
 

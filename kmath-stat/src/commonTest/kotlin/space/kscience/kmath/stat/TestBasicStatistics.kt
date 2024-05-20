@@ -5,10 +5,14 @@
 
 package space.kscience.kmath.stat
 
+import kotlinx.coroutines.CoroutineDispatcher
 import space.kscience.kmath.UnstableKMathAPI
 import space.kscience.kmath.misc.sorted
 import space.kscience.kmath.operations.Float64Field
+import space.kscience.kmath.operations.Int32Field
+import space.kscience.kmath.operations.Int32Ring
 import space.kscience.kmath.random.RandomGenerator
+import space.kscience.kmath.structures.MutableBuffer
 import space.kscience.kmath.structures.slice
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -16,7 +20,10 @@ import kotlin.test.assertEquals
 @OptIn(UnstableKMathAPI::class)
 class TestBasicStatistics {
     companion object {
-        val float64Sample = RandomGenerator.default(123).nextDoubleBuffer(100)
+        val size = 100
+        val float64Sample = RandomGenerator.default(123).nextDoubleBuffer(size)
+        val float64Weights = RandomGenerator.default(123).nextDoubleBuffer(size)
+        val onesWeights = MutableBuffer(100) { 1.0 }
     }
 
     @Test
@@ -48,5 +55,17 @@ class TestBasicStatistics {
     @Test
     fun trimmedMeanFloat64() {
         assertEquals(0.4917, Float64Field.trimmedMean(0.1)(float64Sample), 0.0002)
+    }
+
+    @Test
+    fun weightedMeanFloat64() {
+        assertEquals(0.6580, Float64Field.weightedMean(float64Sample, float64Weights), 0.0005)
+
+        assertEquals(Float64Field.mean(float64Sample), Float64Field.weightedMean(float64Sample, onesWeights), 0.0005)
+    }
+
+    @Test
+    fun zScoreFloat64() {
+        assertEquals(0.2378, Float64Field.zScore(4)(float64Sample), 0.0005)
     }
 }
